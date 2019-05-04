@@ -23,3 +23,32 @@ $this->add_control(
         ]
 	]
 );
+
+
+#more condition for one control:-
+
+$this->add_control(
+            'readmore_text',
+            [
+                'label' => __('Label Text', 'themepaw-companion'),
+                'type' => Controls_Manager::TEXT,
+                'default' => __('Read More','themepaw-companion'),
+                'conditions'   => [
+                    'terms' => [
+                        [
+                            'relation' => 'or',
+                            'terms'    => [
+                                [
+                                    'name'  => 'left_meta',
+                                    'value' => 'readmore',
+                                ],
+                                [
+                                    'name'  => 'right_meta',
+                                    'value' => 'readmore',
+                                ]
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
