@@ -96,3 +96,49 @@ $this->add_control(
 		]
 	]
 );
+
+
+
+
+/*
+ * Add a custom control to an existing Elementor widget:-
+*/
+add_action('elementor/element/before_section_end', 'add_control_in_existing_widget', 10, 3 );
+function add_control_in_existing_widget( $section, $section_id, $args ) {
+	if( $section->get_name() == 'testimonial' && $section_id == 'section_testimonial' ){
+		// we are at the end of the "section_image" area of the "image-box"
+		$section->add_control(
+			'testimonial_name_title_pos' ,
+			[
+				'label'        => 'Name and title position',
+				'type'         => Elementor\Controls_Manager::SELECT,
+				'default'      => 'vertical',
+				'options'      => array(
+					'vertical' => 'Vertical',
+					'horizontal' => 'Horizontal'
+				),
+				'prefix_class' => 'dgm-testimonial-name-title-',
+				'label_block'  => true,
+			]
+		);
+	}
+}
+
+add_action( 'elementor/widget/before_render_content', 'custom_render_button' );
+/**
+ * Adding a new attribute to our button
+ *
+ * @param \Elementor\Widget_Base $button
+ */
+function custom_render_button( $button ) {
+	//Check if we are on a button
+	if( 'testimonial' === $button->get_name() ) {
+		// Get the settings
+		$settings = $button->get_settings();
+
+		// Adding our type as a class to the button
+		if( $settings['testimonial_name_title_pos'] ) {
+			$button->add_render_attribute( 'testimonial_content', 'class', $settings['testimonial_name_title_pos'], true );
+		}
+	}
+}
